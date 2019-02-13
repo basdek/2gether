@@ -5,19 +5,38 @@ import java.time.Instant
 import com.basdek.logintogether.Config.EntityIdentifier
 import com.basdek.logintogether.domain.{Permission, Secret, User}
 
-class UserOperations {
+import scala.concurrent.Future
 
-  def identify(username: String) : Option[User] = ???
+trait UserOperations[F[_]] {
 
-  def authenticate(user: User, password: String) : AuthenticatedUser = ??? //Error cases
+  def identify(username: String) : F[Option[User]]
 
-  def login(authenticatedUser: AuthenticatedUser, permission: Permission) : Option[LoggedInUser] = ??? //Error cases
+  def authenticate(user: User, password: String) : F[Option[AuthenticatedUser]]
+
+  def login(authenticatedUser: AuthenticatedUser, permission: Permission) : F[Option[LoggedInUser]]
+
+
+
+  /**
+  {
+    permission match {
+      case Permission(_, _,_, Left(expireInstant), Some(issuer: Map[String, User])) if authenticatedUser.user == permission.subject && authenticatedUser.user.mates.contains(issuer("issuedBy"))=> ???
+      case _ => ???
+    }
+  }
+    **/
 
 }
 
-case class AuthenticatedUser(user: User)
+object UserOperationsInterpreter extends UserOperations[Future] {
+  override def identify(username: String): Future[Option[User]] = Future.successful(Some(User("jane.doe", "xxx", Set.empty)))
+  override def authenticate(user: User, password: String): Future[Option[AuthenticatedUser]] = Future.successful(Some(AuthenticatedUser(User("jane.doe", "xxx", Set.empty))))
+  override def login(authenticatedUser: AuthenticatedUser, permission: Permission): Future[Option[LoggedInUser]] = ???
+}
 
-case class LoggedInUser(user: User)
+case class AuthenticatedUser(user: User) //TODO: move
+
+case class LoggedInUser(user: User) //TODO: move, moet je hier weten op basis van welke permissie?
 
 //TODO: JwtToken => User, loggedInUser
 
