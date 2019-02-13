@@ -45,18 +45,26 @@
 * Permission
 
     * A ```Permission``` is used to express the relationship between a ```User``` and a ```Resource```/```Operation```.
-        * For an example on what an ```Operation```, see (Domain concepts > User > Unprotected operations and the same 
-        for protected operations.)
+
+        * In the context of a ```Permission```, the ```User``` **for** which the ```Permission``` is issued is called the
+        ```Permission```s *subject*.
+
+        * For an example on what an ```Operation``` might be, see (Domain concepts > User > Unprotected operations and the
+        same for protected operations.)
         
-        * A ```Resource```, in the context of this software is either another ```User``` (NOT self!) or a specific 
-        ```Secret```
+        * A ```Resource```, in the context of this software is either:
+             1. another ```User``` (NOT self!) or
+             2. a specific ```Secret```
     
         *  I.e. a Triple of type: "*Jan* is allowed to *View* *Document.xml*"
     
     * A ```Permission``` has a lifetime, it can *expire*.
-    
+
         * I.e. a way to store: "*Jan* is allowed to *View* *Document.xml* up until *DateTime*"
         
         * Expiration is not mandatory: a ```Permision``` might be indefinitely valid.
-    
+
+    * A ```Permission``` can contain metadata.
+
+        * An example of metadata would be the issuer of the ```Permission```.
     
